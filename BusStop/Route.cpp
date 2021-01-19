@@ -13,9 +13,59 @@ Route::~Route() {}
 
 bool Route::operator<(const Route& compare) const
 {
-	time_t t1 = getTime_t(departureTime);
-	time_t t2 = compare.getDepTime();
-	return t1 < t2;		 
+	if (getTime_t(departureTime) < compare.getDepTime())
+		return true;
+	if (getTime_t(departureTime) == compare.getDepTime() && strcmp(companyName, compare.companyName)!=0)
+	{
+		if (strcmp(companyName, "Grotty")==0)
+			return true;
+	}
+	return false;		 
+}
+
+bool Route::operator==(const Route& compare) const
+{
+	if (strcmp(arrivalTime, compare.arrivalTime) == 0 &&
+		strcmp(departureTime, compare.departureTime) == 0 &&
+		strcmp(companyName, compare.companyName) == 0)
+		return true;
+	return false;
+}
+
+bool Route::isEfficient(const Route& compare) const
+{
+	if(strcmp(arrivalTime, compare.arrivalTime)     == 0 && 
+	   strcmp(departureTime, compare.departureTime) == 0 &&
+	   strcmp(companyName, compare.companyName)     == 0)
+		return false;
+	
+	if (getTime_t(departureTime) == compare.getDepTime())
+	{
+		if (getTime_t(arrivalTime) == compare.getArrTime())
+		{
+			if (strcmp(companyName, compare.companyName) != 0)
+			{
+				if (strcmp(companyName, "Posh") == 0)
+					return true;
+				else return false;
+			}
+		}
+		if (getTime_t(arrivalTime) < compare.getArrTime())
+			return true;
+	}
+	
+	if (getTime_t(departureTime) < compare.getDepTime())
+	{
+		if (getTime_t(arrivalTime) < compare.getArrTime())
+			return true;
+	}
+	
+	if (getTime_t(departureTime) > compare.getDepTime())
+	{
+		if (getTime_t(arrivalTime) < compare.getArrTime() || getTime_t(arrivalTime) == compare.getArrTime())
+			return true;
+	}
+	return false;
 }
 
 int Route::getDepTime()  const
@@ -28,12 +78,12 @@ int Route::getArrTime() const
 	return getTime_t(arrivalTime);
 }
 
-char* Route::getCompName(char* dest) const
+bool Route::isGrotty() const
 {
-	if (strlen(dest) != MAX_COMP_NAME_LEN)
-		dest = (char*)malloc(MAX_COMP_NAME_LEN * sizeof(char));
-	strcpy_s(dest, MAX_COMP_NAME_LEN, companyName);
-	return dest;
+	if (strcmp(companyName, "Grotty") == 0)
+			return true;
+	
+	return false;
 }
 
 int Route::getHour(const char* source) const

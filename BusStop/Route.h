@@ -15,10 +15,12 @@ public:
 
 	friend std::ostream& operator << (std::ostream& out, const Route& obj);
 	bool operator < (const Route& compare) const;
+	bool operator == (const Route& compare) const;
+	bool isEfficient(const Route& compare) const;
 
 	int getDepTime() const;
 	int getArrTime() const;
-	char* getCompName(char* dest) const;
+	bool isGrotty() const;
 
 private:
 	int getHour(const char* source) const;
